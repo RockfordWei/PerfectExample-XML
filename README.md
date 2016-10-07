@@ -155,7 +155,7 @@ If success, you can run the app and then should see three different paragraphs o
 
 ## Working with Nodes
 
-XML is a structured documentation standard with a basic format of <A>B</A> - an XML node. Each node has a tag name, a value, or sub nodes we call "children". To better understand these definitions, trying the following code to "walk through" the whole XML is highly recommended.
+XML is a structured documentation standard with a basic format of ```<A>B</A>``` - an XML node. Each node has a tag name, a value, or sub nodes we call "children". To better understand these definitions, trying the following code to "walk through" the whole XML is highly recommended.
 
 Firstly, we will need a recursive function to iterate all elements inside:
 
