@@ -1,4 +1,4 @@
-# Perfect XML Example [简体中文](README.zh_CN.md)
+# Perfect XML 函数库使用范例 [English](README.md)
 
 <p align="center">
     <a href="http://perfect.org/get-involved.html" target="_blank">
@@ -41,31 +41,32 @@
         <img src="http://perfect.ly/badge.svg" alt="Slack Status">
     </a>
 </p>
-Perfect XML Example Project
+Perfect XML 函数库的使用和演示
 
-This repository demonstrates how to manipulate XML api. It currently contains most of the DOM Core level 2 *read-only* APIs and includes XPath support.
+本文档用于演示如何操作XML函数库。*⚠️注意⚠️* 目前PerfectXML函数库只支持 DOM 二级核心 Core level 2，而且包括在XPath的功能支持上，都是只读的！
 
-## Setup
+## 安装和设置
 
-Before start this demo, please make sure Swift 3.0 or later version has already installed properly on your system. Please check [Swift 3.0 Installation Guide] (http://swift.org) for detail.
+在开始编程之前，需要确定Swift 3.0已经安装成功。如有需要，请查看[Swift 3.0 安装指南（英文版）] (http://swift.org)。
 
-### Linux Setup note
+### Linux 安装注意事项
 
-If you are trying to build this example on Ubuntu Linux, please make sure to install libxml as below:
+如果您希望在 Ubuntu Linux 编译并测试本程序，请注意务必安装libxml：
 
 ```bash
 sudo apt-get install libxml2-dev
 ```
 
-## Quick Start
 
-The general idea of this example is to show data extracted from an XML string. In another word, if you treat XML as a database, then PerfectXML will be the database connector and XPath will be the query language. You can download this example for a quick start:
+## 快速上手
+
+本项目的初衷是展示一下如何从一个XML字符串中读取期望的数据。换言之，如果把XML当作一个数据库，那么我们的PerfectXML就是数据库的连接接口，而XPath就是查询语言。您可以从github上下载我们的范本源代码用于快速上手：
 
 ```bash
 git clone https://github.com/PerfectlySoft/PerfectExample-XML.git
 ```
 
-or if you can start it step by step:
+或者您也可以从一个空目录开始逐步尝试：
 
 ```bash
 mkdir PerfectExample-XML
@@ -73,7 +74,7 @@ cd PerfectExample-XML
 swift package init
 ```
 
-In this case, please modify the Package.swift and manually adding Perfect-libxml2 / Perfect-XML libraries like this:
+这种情况下，您需要手工编辑 Package.swift 并将 Perfect-libxml2 / Perfect-XML 库标记为引用：
 
 ```Swift
 import PackageDescription
@@ -88,51 +89,51 @@ let package = Package(
 )
 ```
 
-Please also include PerfectXML library in your swift code:
+设置完成后就可以在您的 main.swift 文件中引用 PerfectXML函数库了：
 
 ```Swift
 import PerfectXML
 ```
 
-Then you can use Swift Package Manager to build it up & run:
+这时您就可以试一下编译和运行。请使用SPM命令进行编译：
 
 ```bash
 swift build
 ./.build/debug/PerfectExample-XML
 ```
 
-## A Sample XML content
+## XML样本文件
 
-Before doing any actual accessing operation, please copy the following XML sample string to your code, or you can make a similar file stored on the local directory and read it out into the same string:
+在进行任何实际读取操作之前，请将下面的XML样本字符串拷贝到您的程序中。您也可以自己找一个XML文件放在目录下，然后通过代码把内容读出来，效果也是一样的，目标都是要取得XML的字符串：
 
 ```Swift
 let rssXML = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" +
 "<rss version=\"2.0\">" +
 "<channel>" +
-"<title attribute1='first attribute' attribute2='second attribute'>W3Schools Home Page</title>" +
+"<title attribute1='第一个属性' attribute2='第二个属性'>W3学校标准主页</title>" +
 "<link>http://www.w3schools.com</link>" +
-"<description>Free web building tutorials</description>" +
+"<description>Web开发免费教程</description>" +
 "<item id='rssID'>" +
-"<title>RSS Tutorial</title>" +
+"<title>RSS 频道订阅教程</title>" +
 "<link>http://www.w3schools.com/xml/xml_rss.asp</link>" +
-"<description>New RSS tutorial on W3Schools</description>" +
+"<description>新版RSS教程</description>" +
 "</item>" +
 "<item id='xmlID'>" +
-"<title>XML Tutorial</title>" +
+"<title>XML 教程</title>" +
 "<link>http://www.w3schools.com/xml</link>" +
-"<description>New XML tutorial on W3Schools</description>" +
+"<description>新版XML教程</description>" +
 "<deeper xmlns:foo='foo:bar'>" +
-"<deepest foo:atr1='the value' foo:atr2='the other value'></deepest>" +
-"<foo:fool><foo:silly>boo</foo:silly><foo:dummy>woo</foo:dummy></foo:fool>" +
+"<deepest foo:atr1='一个垃圾' foo:atr2='另一个垃圾'></deepest>" +
+"<foo:fool><foo:silly>🍒樱桃卷饼</foo:silly><foo:dummy>饼卷樱桃🍒</foo:dummy></foo:fool>" +
 "</deeper>" +
 "</item>" +
 "</channel>" +
 "</rss>"
 ```
 
-## Make it pretty
+## 格式化XML
 
-Yes, I know your first impression about this above XML - ugly, right? But the good news is that now we can turn it into a pretty format:
+相信您对上面的字符串的第一印象就是——乱七八糟的——对吧？没关系。我们有一个很棒的功能就是把 XML 文档进行格式调整，整理为很漂亮的标准文本：
 
 ```Swift
 let xDoc = XDocument(fromSource: rssXML)
@@ -140,29 +141,28 @@ let prettyString = xDoc?.string(pretty: true)
 let plainString = xDoc?.string(pretty: false)
 ```
 
-The first line ``` xDoc = XDocument ``` created an XML object, and the method ```string(pretty: Bool)``` can get the text content back with an option of pretty format or not.
+第一行 ``` xDoc = XDocument ``` 创建了一个 XML 对象，然后方法 ```string(pretty: Bool)``` 能够再把文本读回来，而且可以选择是否格式化。
 
-You must want to know how pretty it is, right? OK, paste the following snippet and check it out:
+想知道到底能把XML整容到什么程度？试试下面的代码：
 
 ```Swift
-print("Parse an XML document\n")
+print("解析一个 XML 文档\n")
 
 func showParse() {
-		print("XML Parse Function\n")
-		print("Orginal XML:\n\(rssXML)\n\n")
-		print("Pretty:\n\(prettyString!)\n\n")
-		print("Plain\n\(plainString!)\n\n")
+		print("原始 XML文件：\n\(rssXML)\n\n")
+		print("格式化后的效果：\n\(prettyString!)\n\n")
+		print("未经加工的内容：\n\(plainString!)\n\n")
 }
 
 showParse()
 
 ```
 
-If success, you can run the app and then should see three different paragraphs of the same XML but in different formats. The first one is the original XML, the third one is a parsed string and the middle one is the formatted string after parsing.  
+如果运行成功，应该能够看到三个不同的XML结果输出。最上面的是原始的XML文件内容，最下面的解析但是未经格式化的内容，中间的是经过格式化处理的漂亮文本。
 
-## Working with Nodes
+## XML 节点
 
-XML is a structured documentation standard with a basic format of ```<A>B</A>``` - an XML node. Each node has a tag name, a value, or sub nodes we call "children". To better understand these definitions, trying the following code to "walk through" the whole XML is highly recommended.
+XML是一个结构化文本，每个形如```<A>B</A>``` - an XML node. Each node has a tag name, a value, or sub nodes we call "children". To better understand these definitions, trying the following code to "walk through" the whole XML is highly recommended.
 
 Firstly, we will need a recursive function to iterate all elements inside:
 
