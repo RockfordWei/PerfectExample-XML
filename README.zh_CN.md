@@ -217,9 +217,9 @@ testID(id: "xmlID")
 
 能看出来 .getElementById() 和 .getElementsByTagName() 的区别吗？您可以试一试如果同一个文档中存在多个ID重复的节点时会有什么结果。
 
-## getElementsByTagName()
+## getElementsByTagName()方法的更多细节
 
-Method .getElementsByTagName returns an array of nodes, i.e., [XElement], just like a record set in a database query.
+实际上，.getElementsByTagName返回的是一个节点数组 [XElement]，如同数据库的一个结果记录集一样。
 
 The following code demonstrates how to iterate all element in this arrray:
 

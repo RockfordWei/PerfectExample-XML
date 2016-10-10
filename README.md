@@ -261,7 +261,7 @@ Anyway can you see the difference of .getElementById() and .getElementsByTagName
 
 Method .getElementsByTagName returns an array of nodes, i.e., [XElement], just like a record set in a database query.
 
-The following code demonstrates how to iterate all element in this arrray:
+The following code demonstrates how to iterate all element in this array:
 
 ```Swift
 print("Show Items\n")
