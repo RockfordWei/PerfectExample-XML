@@ -1,46 +1,6 @@
 # Perfect XML 函数库使用范例 [English](README.md)
 
-<p align="center">
-    <a href="http://perfect.org/get-involved.html" target="_blank">
-        <img src="http://perfect.org/assets/github/perfect_github_2_0_0.jpg" alt="Get Involed with Perfect!" width="854" />
-    </a>
-</p>
 
-<p align="center">
-    <a href="https://github.com/PerfectlySoft/Perfect" target="_blank">
-        <img src="http://www.perfect.org/github/Perfect_GH_button_1_Star.jpg" alt="Star Perfect On Github" />
-    </a>  
-    <a href="https://gitter.im/PerfectlySoft/Perfect" target="_blank">
-        <img src="http://www.perfect.org/github/Perfect_GH_button_2_Git.jpg" alt="Chat on Gitter" />
-    </a>  
-    <a href="https://twitter.com/perfectlysoft" target="_blank">
-        <img src="http://www.perfect.org/github/Perfect_GH_button_3_twit.jpg" alt="Follow Perfect on Twitter" />
-    </a>  
-    <a href="http://perfect.ly" target="_blank">
-        <img src="http://www.perfect.org/github/Perfect_GH_button_4_slack.jpg" alt="Join the Perfect Slack" />
-    </a>
-</p>
-
-<p align="center">
-    <a href="https://developer.apple.com/swift/" target="_blank">
-        <img src="https://img.shields.io/badge/Swift-3.0-orange.svg?style=flat" alt="Swift 3.0">
-    </a>
-    <a href="https://developer.apple.com/swift/" target="_blank">
-        <img src="https://img.shields.io/badge/Platforms-OS%20X%20%7C%20Linux%20-lightgray.svg?style=flat" alt="Platforms OS X | Linux">
-    </a>
-    <a href="http://perfect.org/licensing.html" target="_blank">
-        <img src="https://img.shields.io/badge/License-Apache-lightgrey.svg?style=flat" alt="License Apache">
-    </a>
-    <a href="http://twitter.com/PerfectlySoft" target="_blank">
-        <img src="https://img.shields.io/badge/Twitter-@PerfectlySoft-blue.svg?style=flat" alt="PerfectlySoft Twitter">
-    </a>
-    <a href="https://gitter.im/PerfectlySoft/Perfect?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge" target="_blank">
-        <img src="https://img.shields.io/badge/Gitter-Join%20Chat-brightgreen.svg" alt="Join the chat at https://gitter.im/PerfectlySoft/Perfect">
-    </a>
-    <a href="http://perfect.ly" target="_blank">
-        <img src="http://perfect.ly/badge.svg" alt="Slack Status">
-    </a>
-</p>
 Perfect XML 函数库的使用和演示
 
 本文档用于演示如何操作XML函数库。*⚠️注意⚠️* 目前PerfectXML函数库只支持 DOM 二级核心 Core level 2，而且包括在XPath的功能支持上，都是只读的！
@@ -162,102 +122,102 @@ showParse()
 
 ## XML 节点
 
-XML是一个结构化文本，每个形如```<A>B</A>``` - an XML node. Each node has a tag name, a value, or sub nodes we call "children". To better understand these definitions, trying the following code to "walk through" the whole XML is highly recommended.
+XML是一个结构化文本，每个形如```<A>B</A>```的结构都是一个XML节点。每个节点都包含一个标签名(tag name)、内容值或子节点。为了更好的理解这个定义，我们试着用下面的程序来遍历整个XML文件：
 
-Firstly, we will need a recursive function to iterate all elements inside:
+首先，我们需要一个递归函数来实现遍历：
 
 ```Swift
 func printChildrenName(_ xNode: XNode) {
 
-	// try treating the current node as a text node
+	// 检查一下节点类型是不是文字节点
 	guard let text = xNode as? XText else {
 
-			// print out the node info
-			print("Name:\t\(xNode.nodeName)\tType:\(xNode.nodeType)\t(children)\n")
+			// 如果不是就输出节点类型
+			print("节点名称：\(xNode.nodeName)\t节点类型：\(xNode.nodeType)\t（包含子节点）\n")
 
-			// find out children of the node
+			// 遍历每个子节点
 			for n in xNode.childNodes {
 
-				// call the function recursively and take the same produces
+				// 再次调用递归函数
 				printChildrenName(n)
 			}
 			return
 	}
 
-	// it is a text node and print it out
-	print("Name:\t\(xNode.nodeName)\tType:\(xNode.nodeType)\tValue:\t\(text.nodeValue!)\n")
+	// 如果是文字节点就直接打印出来
+	print("节点名称：\(xNode.nodeName)\t节点类型\(xNode.nodeType)\t内容值\t\(text.nodeValue!)\n")
 }
 ```
 
 
-Now we can show the whole structure of this XML file:
+然后将根节点作为参数直接调用这个递归函数就可以查看整个 XML 的信息：
 
 ```Swift
 printChildrenName( xDoc!)
 ```
 
-## Access Node by Tag Name
+## 通过标签名称访问节点
 
-A very basic way of querying a specific node is by the tag name. The snippet below shows the method of ```getElementsByTagName ``` in a general manner:
+访问节点的最基本方法就是通过节点名称实现。以下程序展示了```getElementsByTagName ```的通用方法：
 
 ```Swift
 func testTag(tagName: String) {
 
-	// use .getElementsByTagName to get this node.
-	// check if there is such a tag in the xml document
+	// 调用 .getElementsByTagName 访问节点
+	// 并且检查该节点是否有效（在XML文件中存在）
 		guard let node = xDoc?.documentElement?.getElementsByTagName(tagName) else {
-			print("There is no such a tag: `\(tagName)`\n")
+			print("未找到标签“\(tagName)”\n")
 			return
 		}
 
-		// if is, get the first matched
+		// 如果找到了，就提取首个节点作为代表
 		guard let value = node.first?.nodeValue else {
-			print("Tag `\(tagName)` has no value\n")
+			print("标签“\(tagName)”不包含内容。\n")
 			return
 		}
 
-		// show the node value
-		print("Tag '\(tagName)' has a value of '\(value)'\n")
+		// 显示节点内容
+		print("节点“\(tagName)”内容为“\(value)”\n")
 }
 
 testTag(tagName: "link")
 testTag(tagName: "description")
 ```
 
-## Access Node by ID
+## 通过ID唯一属性标识符访问节点
 
-Alternatively, you may also notice that any node can have an attribute called "id", which means you can access this node without knowing its tag:
+另外一种便捷的方法是通过唯一标识符进行节点提取。您可能已经注意到有一些节点带有一个特殊的属性叫做“id”，包含这种属性的节点可以用另外一种方法进行访问：
 
 ```XML
 <item id='xmlID'>
 ```
 
-To get this node by ID, PerfectXML provides a method called .getElementById(), so we can build another route to do the similar API as the previous example but this time we will try the id method:
+具体实现方法是使用 PerfectXML 函数库提供的.getElementById()方法，这样就能实现与前文类似但是又不一样的节点访问简便方法：
 
 ```Swift
 func testID(id: String) {
 
-		// Access node by its id, if available
+		// 如果存在适合的ID，就可以用下面的方法进行访问
 		guard let node = xDoc?.getElementById(id) else {
-			print("There is no such a id: `\(id)`\n")
+			print("文档中不存在这样的ID“\(id)”\n")
 			return
 		}
 
 		guard let value = node.nodeValue else {
-			print("id `\(id)` has no value\n")
+			print("id名为“\(id)”的节点没有内容\n")
 			return
 		}
 
-		print("id '\(id)' has a value of '\(value)'\n")
+		print("节点“\(id)”内容为“\(value)”\n")
 }
 
 testID(id: "rssID")
 testID(id: "xmlID")
 ```
 
-Anyway can you see the difference of .getElementById() and .getElementsByTagName() ? You can have a try to see if there are duplicated IDs in the same XML.
+能看出来 .getElementById() 和 .getElementsByTagName() 的区别吗？您可以试一试如果同一个文档中存在多个ID重复的节点时会有什么结果。
 
-## More about getElementsByTagName()
+## getElementsByTagName()
 
 Method .getElementsByTagName returns an array of nodes, i.e., [XElement], just like a record set in a database query.
 
