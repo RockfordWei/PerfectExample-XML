@@ -280,7 +280,7 @@ func showItems() {
 				let title = item.getElementsByTagName("title").first?.nodeValue
 				let link = item.getElementsByTagName("link").first?.nodeValue
 				let description = item.getElementsByTagName("description").first?.nodeValue
-				print("Title: \(title!)\tLink: \(link!)'\tDescription: \(description!)\n")
+				print("Title: \(title!)\tLink: \(link!)\tDescription: \(description!)\n")
 		}
 }
 
@@ -407,7 +407,7 @@ showAttributes()
 
 XML namespaces are used for providing uniquely named elements and attributes in an XML document. An XML instance may contain element or attribute names from more than one XML vocabulary. If each vocabulary is given a namespace, the ambiguity between identically named elements or attributes can be resolved.
 
-Both .getElementsByTagName() and .getAttributeNode() have namespace versions, i.e., .getElementsByTagNameNS() / .getAttributeNodeNS, etc. In these cases, namespaceURI and localName shall present to complete the request.
+Both .getElementsByTagName() and .getAttributeNode() have namespace versions, i.e., .getElementsByTagNameNS() / .getAttributeNodeNS, etc. In these cases, namespaceURI and localName shall present to complete the request, as the last name and first name for a person.
 
 The following code demonstrates the usage of .getElementsByTagNameNS() and .getNamedItemNS():
 

@@ -1,6 +1,48 @@
 # Perfect XML 函数库使用范例 [English](README.md)
 
 
+<p align="center">
+    <a href="http://perfect.org/get-involved.html" target="_blank">
+        <img src="http://perfect.org/assets/github/perfect_github_2_0_0.jpg" alt="Get Involed with Perfect!" width="854" />
+    </a>
+</p>
+
+<p align="center">
+    <a href="https://github.com/PerfectlySoft/Perfect" target="_blank">
+        <img src="http://www.perfect.org/github/Perfect_GH_button_1_Star.jpg" alt="Star Perfect On Github" />
+    </a>  
+    <a href="https://gitter.im/PerfectlySoft/Perfect" target="_blank">
+        <img src="http://www.perfect.org/github/Perfect_GH_button_2_Git.jpg" alt="Chat on Gitter" />
+    </a>  
+    <a href="https://twitter.com/perfectlysoft" target="_blank">
+        <img src="http://www.perfect.org/github/Perfect_GH_button_3_twit.jpg" alt="Follow Perfect on Twitter" />
+    </a>  
+    <a href="http://perfect.ly" target="_blank">
+        <img src="http://www.perfect.org/github/Perfect_GH_button_4_slack.jpg" alt="Join the Perfect Slack" />
+    </a>
+</p>
+
+<p align="center">
+    <a href="https://developer.apple.com/swift/" target="_blank">
+        <img src="https://img.shields.io/badge/Swift-3.0-orange.svg?style=flat" alt="Swift 3.0">
+    </a>
+    <a href="https://developer.apple.com/swift/" target="_blank">
+        <img src="https://img.shields.io/badge/Platforms-OS%20X%20%7C%20Linux%20-lightgray.svg?style=flat" alt="Platforms OS X | Linux">
+    </a>
+    <a href="http://perfect.org/licensing.html" target="_blank">
+        <img src="https://img.shields.io/badge/License-Apache-lightgrey.svg?style=flat" alt="License Apache">
+    </a>
+    <a href="http://twitter.com/PerfectlySoft" target="_blank">
+        <img src="https://img.shields.io/badge/Twitter-@PerfectlySoft-blue.svg?style=flat" alt="PerfectlySoft Twitter">
+    </a>
+    <a href="https://gitter.im/PerfectlySoft/Perfect?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge" target="_blank">
+        <img src="https://img.shields.io/badge/Gitter-Join%20Chat-brightgreen.svg" alt="Join the chat at https://gitter.im/PerfectlySoft/Perfect">
+    </a>
+    <a href="http://perfect.ly" target="_blank">
+        <img src="http://perfect.ly/badge.svg" alt="Slack Status">
+    </a>
+</p>
+
 Perfect XML 函数库的使用和演示
 
 本文档用于演示如何操作XML函数库。*⚠️注意⚠️* 目前PerfectXML函数库只支持 DOM 二级核心 Core level 2，而且包括在XPath的功能支持上，都是只读的！
@@ -221,84 +263,84 @@ testID(id: "xmlID")
 
 实际上，.getElementsByTagName返回的是一个节点数组 [XElement]，如同数据库的一个结果记录集一样。
 
-The following code demonstrates how to iterate all element in this arrray:
+以下代码展示了如何将所有标签名相同的同级节点返回为一个数组：
 
 ```Swift
-print("Show Items\n")
+print("显示同名标签节点数组\n")
 
 func showItems() {
-		// get all items with tag name of "item"
+		// 选择所有名为“item”的节点
 		let feedItems = xDoc?.documentElement?.getElementsByTagName("item")
 
-		// checkout how many items indeed.
+		// 检查该数组实际元素数量
 		let itemsCount = feedItems?.count
-		print("There are totally \(itemsCount!) Items Found\n")
+		print("总共找到 \(itemsCount!) 个元素\n")
 
-		// iterate all items in the result set
+		// 遍历结果集内所有元素
 		for item in feedItems!
 		{
 				let title = item.getElementsByTagName("title").first?.nodeValue
 				let link = item.getElementsByTagName("link").first?.nodeValue
 				let description = item.getElementsByTagName("description").first?.nodeValue
-				print("Title: \(title!)\tLink: \(link!)'\tDescription: \(description!)\n")
+				print("标题：\(title!)\t链接：\(link!)\t说明： \(description!)\n")
 		}
 }
 
 showItems()
 ```
 
-## Relationships of a Node Family
+## 通过节点之间的关系进行访问
 
-PerfectXML provides a convenient way to access all relationships of a specific XML node: Parent, Siblings & Children.
+PerfectXML 函数库提供一系列简便方法，用于根据当前 XML 节点信息访问所有相关节点：父节点、子节点和同级相邻节点：
 
-### Parent of a Node
+### 父节点
 
-Parent node can be accessed by a node property called "parentNode", see the following example to see the usage:
+父节点的访问可以通过当前节点的“parentNode”属性进行访问，用法如下：
 
 ```Swift
-print("Parent of a Node\n")
+print("父节点\n")
 
 func showParent(tag: String) {
 
 		guard let node = xDoc?.documentElement?.getElementsByTagName(tag).first else {
-			print("There is no such a tag '\(tag)'.\n")
+			print("未找到标签名为“\(tag)”的节点。\n")
 			return
 		}
 
-		// HERE is the way of accessing a parent node
+		// 访问父节点；如果父节点为空则意味着是根节点。
 		guard let parent = node.parentNode else {
-			print("Tag '\(tag)' is the root node.\n")
+			print("标签“\(tag)”为文档根节点。\n")
 			return
 		}
 		let name = parent.nodeName
-		print("Parent of '\(tag)' is '\(name)'\n")
+		print("节点“\(tag)”的父节点（上一级节点）是“\(name)”。\n")
 }
 
 showParent(tag: "link")
 ```
 
-### Node Siblings
+### 同级相邻节点
 
-Each XML node can have two siblings: previousSibling and nextSibling. Try the following snippet to test the availability of siblings.
+每个 XML 节点都可能存在两个同级相邻节点：previousSibling（前一个节点）和 nextSibling（后一个节点）。以下代码演示了相邻节点的互相访问：
 
 ```Swift
-print("Siblings of a Node\n")
+print("同级相邻节点：\n")
 
 func showSiblings (tag: String) {
 
 		let node = xDoc?.documentElement?.getElementsByTagName(tag).first
 
-		// Check the previous sibling of current node
+		// 查看当前节点的前一个同级相邻节点。
 		let previousNode = node?.previousSibling
 		var name = previousNode?.nodeName
 		var value = previousNode?.nodeValue
-		print("Previous Sibling of \(tag) is \(name!)\t\(value!)\n")
+		print("标签“\(tag)”的前一个同级相邻节点名称为\(name!)，\t内容值为：\(value!)\n")
 
-		// Check the next sibling of current node
+    // 查看当前节点的后一个同级相邻节点。
 		let nextNode = node?.nextSibling
 		name = nextNode?.nodeName
 		value = nextNode?.nodeValue
-		print("Next Sibling of \(tag) is \(name!)\t\(value!)\n")
+    print("标签“\(tag)”的后一个同级相邻节点名称为\(name!)，\t内容值为：\(value!)\n")
 }
 
 
@@ -306,37 +348,37 @@ showSiblings(tag: "link")
 showSiblings(tag: "description")
 ```
 
-### First & Last Child
+### 子节点：首个子节点和末尾子节点
 
-If an XML node has a child, then you can try properties of .firstChild / .lastChild instead of accessing them from the .childNodes array:
+如果一个 XML 节点存在子节点，那么可以尝试用 .firstChild （首个子节点）/ .lastChild （末尾子节点）属属性直接访问，而避免通过.childNodes 子节点数组去计算和访问：
 
 ```Swift
-print("First & Last Child\n")
+print("首个子节点和末尾子节点\n")
 
 func firstLast() {
 		let node = xDoc?.documentElement?.getElementsByTagName("channel").first
 
-		/// retrieve the first child
+		/// 返回首个子节点
 		let firstChild = node?.firstChild
 		var name = firstChild?.nodeName
 		var value = firstChild?.nodeValue
-		print("First Child of Channel is \(name!)\t\(value!)\n")
+		print("Channel的首个子节点是：\(name!)\t\(value!)\n")
 
-		/// retrieve the last child
+		/// 返回末尾子节点
 		let lastChild = node?.lastChild
 		name = lastChild?.nodeName
 		value = lastChild?.nodeValue
-		print("Last Child of Channel is \(name!)\t\(value!)\n")
+    print("Channel的末尾子节点是：\(name!)\t\(value!)\n")
 }
 
 firstLast()
 ```
 
-These methods are convenient in certain scenarios, such as jump to the first page or the last page in a book.
+上述方法在默写情况下使得编程过程更加简练，比如在网页间跳转并选择首页和尾页。
 
-## Node Attributes
+## 节点属性
 
-Any XML node / element can have attributes in such a style:
+任意 XML 节点/元素都能自定义多个属性，格式如下：
 
  ```XML
  <node attribute1='value of attribute1' attribute2='value of attribute2'>
@@ -344,41 +386,41 @@ Any XML node / element can have attributes in such a style:
  </node>
 ```
 
-Node method .getAttribute(name: String) provides the functionality of accessing attributes. See the code below:
+节点对象方法 .getAttribute(name: String) 用于访问这些属性。参考以下例子：
 
 ```Swift
-print("Attributes of an element\n")
+print("打印节点属性\n")
 
 func showAttributes() {
 		let node = xDoc?.documentElement?.getElementsByTagName("title").first
 
-		/// get some attributes of a node
+		/// 读取一个节点的若干属性
 		let att1 = node?.getAttribute(name: "attribute1")
-		print("attribute1 of title is \(att1)\n")
+		print("标题对象的属性1“attribute1”内容为 \(att1)\n")
 
 		let att2 = node?.getAttributeNode(name: "attribute2")
-		print("attribute2 of title is \(att2?.value)\n")
+    print("标题对象的属性2“attribute2”内容为 \(att2)\n")
 }
 
 showAttributes()
 ```
 
-## Namespaces
+## 命名空间
 
-XML namespaces are used for providing uniquely named elements and attributes in an XML document. An XML instance may contain element or attribute names from more than one XML vocabulary. If each vocabulary is given a namespace, the ambiguity between identically named elements or attributes can be resolved.
+XML 规定了允许在同一个 XML文档内保证名称属性即使重复也能实现唯一性访问的方法，即命名空间。一个 XML 实例可以包含不限于同一 XML 字典约束的任意元素或属性名称。如果每个字典都有一个独立的命名空间，则区分重名元素和重名属性变得非常简单，不会导致内容混淆。
 
-Both .getElementsByTagName() and .getAttributeNode() have namespace versions, i.e., .getElementsByTagNameNS() / .getAttributeNodeNS, etc. In these cases, namespaceURI and localName shall present to complete the request.
+访问节点及属性的方法 .getElementsByTagName() 和 .getAttributeNode() 都有命名空间的版本，即 .getElementsByTagNameNS() 和 .getAttributeNodeNS。这种情况下，同时需要输入命名空间名称 namespaceURI 和在该空间内的本地名称 localName 以完成查询 —— 就像姓和名一样确保提取过程的唯一性。
 
-The following code demonstrates the usage of .getElementsByTagNameNS() and .getNamedItemNS():
+以下代码演示了 .getElementsByTagNameNS() 和 .getNamedItemNS()的使用方法：
 
 ```Swift
-print("Namespaces\n")
+print("命名空间\n")
 
 func showNamespaces(){
 	let deeper = xDoc?.documentElement?.getElementsByTagName("deeper").first
 	let atts = deeper?.firstChild?.attributes;
 	let item = atts?.getNamedItemNS(namespaceURI: "foo:bar", localName: "atr2")
-	print("Namespace of deeper has an attribute of \(item?.nodeValue)\n")
+	print("deeper的命名空间内有一个属性值为“\(item?.nodeValue)”。\n")
 
 	let foos = xDoc?.documentElement?.getElementsByTagNameNS(namespaceURI: "foo:bar", localName: "fool")
 	var count = foos?.count
@@ -388,11 +430,11 @@ func showNamespaces(){
 	let prefix = node?.prefix
 	let nuri = node?.namespaceURI
 
-	print("Namespace of 'foo:bar' has \(count!) element:\n")
-	print("Node Name: \(name!)\n")
-	print("Local Name: \(localName!)\n")
-	print("Prefix: \(prefix!)\n")
-	print("Namespace URI: \(nuri!)\n")
+	print("“foo:bar”命名空间有以下\(count!) 个元素：\n")
+	print("节点名称： \(name!)\n")
+	print("本地名称： \(localName!)\n")
+	print("前缀： \(prefix!)\n")
+	print("命名空间唯一资源路径URI：\(nuri!)\n")
 
 	let children = node?.childNodes
 
@@ -406,9 +448,9 @@ func showNamespaces(){
 	let va = a?.nodeValue
 	let vb = b?.nodeValue
 
-	print("This node also has \(count!) children.\n")
-	print("The first one is called '\(na!)' with value of '\(va!)'.\n")
-	print("And the last one is called '\(nb!)' with value of '\(vb!)'\n")
+	print("该节点还包含 \(count!) 个子节点。\n")
+	print("第一个子节点名称为“\(na!)”，内容值为“\(va!)”。\n")
+  print("最后一个子节点名称为“\(nb!)”，内容值为“\(vb!)”。\n")
 }
 
 showNamespaces()
@@ -417,18 +459,18 @@ showNamespaces()
 
 ## XPath
 
-XPath (XML Path Language) is a query language for selecting nodes from an XML document. In addition, XPath may be used to compute values (e.g., strings, numbers, or Boolean values) from the content of an XML document.
+XPath 的官方名称为 XML 路径语言，是用于在 XML文档中筛选节点的一种查询语言。此外，XPath 还可以用于在 XML 文档内用于计算变量值（比如字符串、数值或者逻辑布尔变量值）。
 
-This demo can extract the path you input:
+以下程序演示可以根据您自行输入的路径进行节点访问：
 
 ```Swift
 
-print("XML Path Demo\n")
+print("XML 路径查询演示\n")
 
 func showXPath(xpath: String) {
-    /// Use .extract() method to deal with the XPath request.
+    /// 请使用.extract()方法来处理 XPath 请求信息：
 		let pathResource = xDoc?.extract(path: xpath)
-		print("XPath '\(xpath)':\n\(pathResource!)\n")
+		print("XPath路径： '\(xpath)':\n\(pathResource!)\n")
 }
 
 showXPath(xpath: "/rss/channel/item")
@@ -437,36 +479,35 @@ showXPath(xpath: "/rss/channel/link/text()")
 showXPath(xpath: "/rss/channel/item[2]/deeper/foo:bar")
 ```
 
-Then build & run and try any possible XPath as need. Now you can see how powerful XML & XPath are - theoretically, it can even wrap up a total file system, can't it?
+完成后即可编译运行，并请尝试自行改变上述路径以检查实际效果。现在您可能已经理解为什么说 XML 和 XPath 功能如此强大 —— 理论上一个XML文件足可以将整个文件系统包裹起来，对不对？
 
-Have Fun!
+### Swift 语言兼容性
 
+本项目仅支持 Swift 3.0 toolchain 工具集，可随 Xcode 8.0 以上版本一同安装；或在 Linux 上通过官网 [Swift.org](http://swift.org/)下载安装。
 
-###Compatibility with Swift
+## Swift 版本要求：
 
-This project works only with the Swift 3.0 toolchain available with Xcode 8.0+ or on Linux via [Swift.org](http://swift.org/).
-
-## Swift version note:
-
-Due to a late-breaking bug in Xcode 8, if you wish to run directly within Xcode, we recommend installing swiftenv and installing the Swift 3.0.1 preview toolchain.
+由于 Xcode 8 在发行后不久发现了一些问题，如果您仍然坚持使用 Xcode 开发本项目或类似项目，我们建议您自行安装 swiftenv，并安装最新的 Swift 3.0.1 预览版工具集：
 
 ```
 # after installing swiftenv from https://swiftenv.fuller.li/en/latest/
 swiftenv install https://swift.org/builds/swift-3.0.1-preview-1/xcode/swift-3.0.1-PREVIEW-1/swift-3.0.1-PREVIEW-1-osx.pkg
 ```
 
-Alternatively, add to the "Library Search Paths" in "Project Settings" $(PROJECT_DIR), recursive.
+在 Xcode 中另外一种方法是在“项目设定”中将函数库搜索路径“Library Search Paths”递归追加到工程根目录 “$(PROJECT_DIR)”下。
 
 
-## Issues
+## 问题报告、内容贡献和客户支持
 
-We are transitioning to using JIRA for all bugs and support related issues, therefore the GitHub issues has been disabled.
+我们目前正在过渡到使用JIRA来处理所有源代码资源合并申请、修复漏洞以及其它有关问题。因此，GitHub 的“issues”问题报告功能已经被禁用了。
 
-If you find a mistake, bug, or any other helpful suggestion you'd like to make on the docs please head over to [http://jira.perfect.org:8080/servicedesk/customer/portal/1](http://jira.perfect.org:8080/servicedesk/customer/portal/1) and raise it.
+如果您发现了问题，或者希望为改进本文提供意见和建议，[请在这里指出](http://jira.perfect.org:8080/servicedesk/customer/portal/1).
 
-A comprehensive list of open issues can be found at [http://jira.perfect.org:8080/projects/ISS/issues](http://jira.perfect.org:8080/projects/ISS/issues)
+在您开始之前，请参阅[目前待解决的问题清单](http://jira.perfect.org:8080/projects/ISS/issues).
 
+### Contributing
 
+我们欢迎所有贡献以及对Perfect文档提高的宝贵意见。我们欢迎您为Perfect付出宝贵的支持。如果您发现了任何文字或者内容有错误，或者有任何建议，请[提交一个代码上传请求，或在JIRA上报告问题](http://jira.perfect.org:8080/servicedesk/customer/portal/1/user/login?destination=portal%2F1).
 
-## Further Information
-For more information on the Perfect project, please visit [perfect.org](http://perfect.org).
+## 更多信息
+更多信息请详见 Perfect 工程官网 [perfect.org](http://perfect.org).
